@@ -10,8 +10,11 @@ export function useAuth() {
       dispatch(setLoading(true));
       const data = await Login({ email, password });
       dispatch(setUser(data.user));
+      return { success: true };
     } catch (error) {
-      dispatch(setErr(error.response?.data?.message || "Login Failed"));
+      const message = error.response?.data?.message || "Login Failed";
+      dispatch(setErr(message));
+      return { success: false, message };
     } finally {
       dispatch(setLoading(false));
     }
@@ -43,6 +46,6 @@ export function useAuth() {
   return {
     handleRegister,
     handleLogin,
-    getMe,
+    handleGetMe,
   };
 }

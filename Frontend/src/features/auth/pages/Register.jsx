@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../hook/useAuth";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -12,7 +12,8 @@ function Register() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {handleRegister} = useAuth()
+  const { handleRegister } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -25,8 +26,14 @@ function Register() {
     setSuccessMessage("");
     setIsSubmitting(true);
 
-   await  handleRegister(formData)
-
+    try {
+      await handleRegister(formData);
+      navigate("/login");
+    } catch (error) {
+      setErrorMessage(error.message || "Login failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -123,12 +130,18 @@ function Register() {
           </div>
 
           {errorMessage && (
-            <p role="alert" className="rounded-lg bg-red-400/10 px-4 py-3 text-sm text-red-200">
+            <p
+              role="alert"
+              className="rounded-lg bg-red-400/10 px-4 py-3 text-sm text-red-200"
+            >
               {errorMessage}
             </p>
           )}
           {successMessage && (
-            <p role="status" className="rounded-lg bg-emerald-400/10 px-4 py-3 text-sm text-emerald-200">
+            <p
+              role="status"
+              className="rounded-lg bg-emerald-400/10 px-4 py-3 text-sm text-emerald-200"
+            >
               {successMessage}
             </p>
           )}

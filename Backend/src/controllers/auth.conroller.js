@@ -78,7 +78,7 @@ export const verifyEmailController = async (req,res)=>{
   const htmlContent = `
   <h1>Email Verified Successfully</h1>
   <p>Thank you for verifying your email. You can now log in to your account.</p>
-  <a href="http://localhost:8080/login">Login</a>
+  <a href="http://localhost:8080/api/auth/login">Login</a>
   `;
   
   res.send(htmlContent)
@@ -116,7 +116,7 @@ export const loginController = async (req,res)=>{
 
     const isPasswordMatched = await user.comparePassword(password)
 
-    if(isPasswordMatched){
+    if(!isPasswordMatched){
       return res.status(400).json({
         message:"Invalid crentials",
         success:false,

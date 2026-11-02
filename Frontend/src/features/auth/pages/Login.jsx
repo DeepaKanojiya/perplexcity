@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { useAuth } from "../hook/useAuth";
+import { useSelector } from "react-redux";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
+  const loading = useSelector((state) => state.auth.loading);
 
   const { handleLogin } = useAuth();
 
@@ -20,8 +23,24 @@ function Login() {
     setErrorMessage("");
     setIsSubmitting(true);
 
-    await handleLogin(formData);
+    try {
+      const result = await handleLogin(formData);
+      if (!result.success) {
+        setErrorMessage(result.message);
+        return;
+      }
+
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(error.message || "Login failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (!loading && user) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#171512] px-5 py-12 text-[#f4eee5]">

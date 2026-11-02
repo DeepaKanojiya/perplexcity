@@ -1,0 +1,11 @@
+import { io } from "socket.io-client";
+
+export const initializeSocketConnection = () => {
+  const socket = io("http://localhost:8080", {
+    withCredentials: true,
+  });
+
+  socket.on("connection", () => {
+    console.log("connected to Socket.IO server");
+  });
+};
