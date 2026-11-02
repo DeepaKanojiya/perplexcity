@@ -10,6 +10,7 @@ const chatSchema = new mongoose.Schema({
     title:{
         type:String,
         required:true,
+        default:"new chat",
         trim:true
     }
 },{timestamps:true})

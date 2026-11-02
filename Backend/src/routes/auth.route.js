@@ -3,16 +3,15 @@ import {
   registerController,
   verifyEmailController,
   loginController,
-  getMeController
+  getMeController,
 } from "../controllers/auth.conroller.js";
 import {
   registerValidationRules,
   LoginValidationRules,
 } from "../validators/auth.validator.js";
-import { authMiddleware } from "../middleware/auth.middleware..js";
+import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const authRouter = Router();
-
 
 authRouter.post("/register", registerValidationRules, registerController);
 authRouter.post("/login", LoginValidationRules, loginController);
